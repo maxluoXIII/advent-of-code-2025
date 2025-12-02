@@ -31,21 +31,30 @@ fn main() {
 
     let mut pos = 50;
     let mut zero_count = 0;
+    let mut zero_pass_count = 0;
     for line in reader.lines() {
         let line = line.expect("Could not get line");
+        let start_pos = pos;
         match parse_lock_action(&line) {
             Ok((_, LockAction::TurnLeft(l))) => {
+                zero_pass_count += l / 100;
                 let l = l % 100;
-                if l > pos {
+                if l >= pos {
                     pos = 100 - (l - pos);
+                    if start_pos != 0 {
+                        zero_pass_count += 1;
+                    }
+                    pos = pos % 100;
                 } else {
                     pos -= l;
                 }
-                println!("{}", pos);
             }
             Ok((_, LockAction::TurnRight(r))) => {
-                pos = (pos + r) % 100;
-                println!("{}", pos);
+                zero_pass_count += r / 100;
+                let r = r % 100;
+                pos = pos + r;
+                zero_pass_count += pos / 100;
+                pos = pos % 100;
             }
             Err(e) => {
                 eprintln!("Could not parse line {} because {}", line, e)
@@ -57,4 +66,5 @@ fn main() {
     }
 
     println!("Zero count: {}", zero_count);
+    println!("Zero pass count: {}", zero_pass_count);
 }
