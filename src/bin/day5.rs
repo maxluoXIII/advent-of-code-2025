@@ -83,5 +83,11 @@ fn main() {
         }
     }
 
-    println!("Fresh count: {}", fresh_ingredient_count);
+    let mut fresh_count = 0;
+    for range in ranges {
+        fresh_count += range.count();
+    }
+
+    println!("Fresh ingredient count: {}", fresh_ingredient_count);
+    println!("Fresh count: {}", fresh_count);
 }
