@@ -73,9 +73,9 @@ fn main() {
         })
         .collect();
 
-    let mut merge_count = 0;
     let mut merge_idx = 0;
-    while merge_count < 1000 {
+    // for part 1, stop after 1000 connections
+    loop {
         let (a, b) = possible_edges[merge_idx];
         let a_circuit = junctions[a].circuit;
         let b_circuit = junctions[b].circuit;
@@ -88,12 +88,20 @@ fn main() {
                 .map(|&id| id)
                 .collect();
             circuits[b_circuit].clear();
+
+            if circuits[a_circuit].len() == junctions.len() {
+                println!(
+                    "Product of x of last two junctions: {}",
+                    junctions[a].loc.0 * junctions[b].loc.0
+                );
+                break;
+            }
         }
         merge_idx += 1;
-        merge_count += 1;
     }
 
-    circuits.sort_by_key(|c| Reverse(c.len()));
-    let largest_3_prod: usize = circuits.iter().take(3).map(|c| c.len()).product();
-    println!("largest 3 circuit product: {}", largest_3_prod);
+    // part 1
+    // circuits.sort_by_key(|c| Reverse(c.len()));
+    // let largest_3_prod: usize = circuits.iter().take(3).map(|c| c.len()).product();
+    // println!("largest 3 circuit product: {}", largest_3_prod);
 }
